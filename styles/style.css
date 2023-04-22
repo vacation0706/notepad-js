@@ -1,0 +1,54 @@
+/* styles/style.css */
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+main {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+section {
+  flex: 1;
+  margin: 0 1rem;
+}
+
+input#title {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  box-sizing: border-box;
+}
+
+button#saveNoteBtn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+#display {
+  width: 3000px;
+  background-color: #ffeb3b;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  min-width: 300px;
+  padding: 10px;
+  margin: 5px;
+  word-wrap: break-word;
+  overflow-y: scroll;
+  max-height: 600px;
+}
