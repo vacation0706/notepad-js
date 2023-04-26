@@ -38,6 +38,8 @@ function render() {
     const saveId = document.createElement("p"); //새로운 'p'요소를 생성하고 'saveId' 변수에 할당합니다. 이것은 메모의 고유한 ID를 표시할 요소입니다.
     const deleteMemoBtn = document.createElement("button"); //새로운 'button' 요소를 생성하고 'deleteMemoBtn' 변수에 할당합니다. 이것은 메모를 삭제하기 위한 버튼입니다.
     const updateMemoBtn = document.createElement("button"); //새로운 'button' 요소를 생성하고 'updateMemobtn' 변수에 할당합니다. 이것은 메모를 수정하기 위한 버튼입니다.
+    deleteMemoBtn.classList.add("memo-btn", "delete-btn"); // Add classes to the delete button
+    updateMemoBtn.classList.add("memo-btn", "update-btn"); // Add classes to the update button
 
     saveTitle.textContent = item.title; //'saveTitle' 요소에 메모 제목을 설정합니다.
     saveContent.innerHTML = item.content; //'saveContent' 요소에 메모 내용을 설정합니다.
@@ -49,6 +51,11 @@ function render() {
     updateMemoBtn.textContent = "수정";
     updateMemoBtn.setAttribute("onclick", "update()");
     updateMemoBtn.setAttribute("onclick", `update(${item.len})`);
+
+    saveContent.addEventListener("click", () => {
+      document.getElementById("title").value = item.title;
+      editor.setMarkdown(item.content);
+    });
 
     display.appendChild(saveId); // 메소드를 사용하여 생성된 요소를 display 요소의 자식으로 추가합니다.
     display.appendChild(saveTitle);
@@ -71,6 +78,7 @@ function remove() {
   } //if 문에서 idx가 truthy 값이면 allMemo 배열에서 idx.len 과 일치하는 len 속성을 가진 객체를 찾아 해당 객체를 배열에서 제거합니다.
   localStorage.setItem("allMemo", JSON.stringify(allMemo));
   render();
+  resetEditor();
 }
 
 function update(index) {
@@ -79,7 +87,13 @@ function update(index) {
   if (memoIndex >= 0 && memoIndex < allMemo.length) {
     const memo = allMemo[memoIndex];
     document.getElementById("title").value = memo.title;
-    editor.setMarkdown(memo.content);
+
+    const contentWithoutPTags = memo.content
+      .replace(/<p>/g, "")
+      .replace(/<\/p>/g, "\n");
+
+    editor.setMarkdown(contentWithoutPTags);
+
     document.getElementById("saveNoteBtn").textContent = "Update Note";
     document.getElementById("saveNoteBtn").onclick = function () {
       saveUpdatedNote(memoIndex);
@@ -106,7 +120,19 @@ function saveUpdatedNote(memoIndex) {
   localStorage.setItem("allMemo", JSON.stringify(allMemo));
   render();
 
-  // Reset the save button to its original state
   document.getElementById("saveNoteBtn").textContent = "Save Note";
   document.getElementById("saveNoteBtn").setAttribute("onclick", "saveNote()");
+
+  document.getElementById("title").value = "";
+  editor.setMarkdown("");
+
+  document.getElementById("saveNoteBtn").textContent = "Save Note";
+  document.getElementById("saveNoteBtn").setAttribute("onclick", "saveNote()");
+}
+
+function resetEditor() {
+  document.getElementById("title").value = "";
+  editor.setMarkdown("");
+  document.getElementById("saveNoteBtn").textContent = "Save Note";
+  document.getElementById("saveNoteBtn").onclick = saveNote;
 }

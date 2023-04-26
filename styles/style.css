@@ -15,7 +15,7 @@ main {
   align-items: flex-start;
   width: 100%;
   max-width: 1200px;
-  padding: 2rem;
+  padding: 300px;
   box-sizing: border-box;
 }
 
@@ -40,7 +40,6 @@ button#saveNoteBtn {
 }
 
 #display {
-  width: 3000px;
   background-color: #ffeb3b;
   border: 1px solid #ccc;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -48,7 +47,29 @@ button#saveNoteBtn {
   min-width: 300px;
   padding: 10px;
   margin: 5px;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   overflow-y: scroll;
   max-height: 600px;
+}
+
+#display img {
+  max-width: 100%;
+  height: auto;
+}
+
+.memo-btn {
+  display: inline-block;
+  margin: 5px 35px;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.memo-btn:hover {
+  transform: scale(1.1);
+}
+.delete-btn .update-btn {
+  background-color: #eb902e; /* Green */
+  color: white;
 }
