@@ -38,18 +38,17 @@ function render() {
     const saveId = document.createElement("p"); //새로운 'p'요소를 생성하고 'saveId' 변수에 할당합니다. 이것은 메모의 고유한 ID를 표시할 요소입니다.
     const deleteMemoBtn = document.createElement("button"); //새로운 'button' 요소를 생성하고 'deleteMemoBtn' 변수에 할당합니다. 이것은 메모를 삭제하기 위한 버튼입니다.
     const updateMemoBtn = document.createElement("button"); //새로운 'button' 요소를 생성하고 'updateMemobtn' 변수에 할당합니다. 이것은 메모를 수정하기 위한 버튼입니다.
-    deleteMemoBtn.classList.add("memo-btn", "delete-btn"); // Add classes to the delete button
-    updateMemoBtn.classList.add("memo-btn", "update-btn"); // Add classes to the update button
+    deleteMemoBtn.classList.add("memo-btn", "delete-btn");
+    updateMemoBtn.classList.add("memo-btn", "update-btn");
 
     saveTitle.textContent = item.title; //'saveTitle' 요소에 메모 제목을 설정합니다.
-    saveContent.innerHTML = item.content; //'saveContent' 요소에 메모 내용을 설정합니다.
+    saveContent.innerHTML = item.content.replace(/\n/g, "<br>");
     saveId.textContent = item.len + 1; //'saveId' 요소에 메모의 고유한 ID를 설정합니다. 여기서 'item.len'은 'allMemo' 배열의 길이를 나타내고, '+1'은 새로운 메모가 추가될 경우 이전 메모와 구분하기 위해 사용됩니다.
     deleteMemoBtn.textContent = "삭제"; //deleteMemoBtn 요소에 "삭제"라는 텍스트를 설정합니다.
     deleteMemoBtn.setAttribute("id", item.len); //deleteMemoBtn 요소에 id 속성을 설정합니다. 이것은 나중에 해당 메모를 삭제할 때 사용됩니다.
     deleteMemoBtn.setAttribute("onclick", "remove()"); //deleteMemoBtn 요소에 onclick 이벤트를 설정합니다. 이것은 버튼이 클릭되었을 때 remove() 함수가 실행됨을 나타냅니다.
 
     updateMemoBtn.textContent = "수정";
-    updateMemoBtn.setAttribute("onclick", "update()");
     updateMemoBtn.setAttribute("onclick", `update(${item.len})`);
 
     saveContent.addEventListener("click", () => {
@@ -112,7 +111,7 @@ function update(index) {
 
 function saveUpdatedNote(memoIndex) {
   const updatedTitle = document.getElementById("title").value;
-  const updatedContent = editor.getMarkdown(); //
+  const updatedContent = editor.getMarkdown();
 
   allMemo[memoIndex].title = updatedTitle;
   allMemo[memoIndex].content = updatedContent;
@@ -120,19 +119,12 @@ function saveUpdatedNote(memoIndex) {
   localStorage.setItem("allMemo", JSON.stringify(allMemo));
   render();
 
-  document.getElementById("saveNoteBtn").textContent = "Save Note";
-  document.getElementById("saveNoteBtn").setAttribute("onclick", "saveNote()");
-
-  document.getElementById("title").value = "";
-  editor.setMarkdown("");
-
-  document.getElementById("saveNoteBtn").textContent = "Save Note";
-  document.getElementById("saveNoteBtn").setAttribute("onclick", "saveNote()");
+  resetEditor();
 }
 
 function resetEditor() {
-  document.getElementById("title").value = "";
-  editor.setMarkdown("");
-  document.getElementById("saveNoteBtn").textContent = "Save Note";
-  document.getElementById("saveNoteBtn").onclick = saveNote;
+  document.getElementById("title").value = ""; //id가 title 인 HTML 요소의 값을 빈 문자열("")로 설정해서 값을 지움
+  editor.setMarkdown(""); //빈 문자열 ""을 인수로 사용해서 편집기 객체에 메서드를 호출해서 빈 상태로 재설정
+  document.getElementById("saveNoteBtn").textContent = "Save Note"; //수정 상태가 끝나면 다시 save note로 바꿈
+  document.getElementById("saveNoteBtn").onclick = saveNote; // 버튼이 클릭될 때 saveNote 함수가 호출됩니다. 버튼이 클릭될 때 saveNote 함수가 호출됩니다.
 }
